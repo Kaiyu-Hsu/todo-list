@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const Todo = require('./models/todo')
 const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
 
 const app = express()
 const port = 3000
@@ -29,6 +30,9 @@ app.set('view engine', 'hbs')
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
 
+// 設定每一筆請求都會透過 methodOverride 進行前置處理
+app.use(methodOverride('_method'))
+
 app.get('/', (req, res) => {
   Todo.find() // 取出 Todo model 裡的所有資料
     .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
@@ -46,7 +50,7 @@ app.post('/todos', (req, res) => {
 })
 
 // 資料庫修改特定 todo 的資料
-app.post('/todos/:id/edit', (req, res) => {
+app.post('/todos/:id', (req, res) => {
   const id = req.params.id
   // const name = req.body.name
   // const isDone = req.body.isDone
@@ -67,7 +71,7 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 // 刪除特定 To -do
-app.post('/todos/:id/delete', (req, res) => {
+app.post('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove())
