@@ -50,7 +50,7 @@ app.post('/todos', (req, res) => {
 })
 
 // 資料庫修改特定 todo 的資料
-app.post('/todos/:id', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   // const name = req.body.name
   // const isDone = req.body.isDone
@@ -71,7 +71,7 @@ app.post('/todos/:id', (req, res) => {
 })
 
 // 刪除特定 To -do
-app.post('/todos/:id', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove())
